@@ -13,15 +13,15 @@ const NGODetail = () => {
   useEffect(() => {
     const fetchNGODetails = async () => {
       try {
-        // Fetch NGO details
-        const ngoResponse = await axios.get(`/api/ngos/${id}/`);
+        // Fetch NGO details - usar URL completo para evitar problemas com o proxy
+        const ngoResponse = await axios.get(`http://localhost:8000/api/ngos/${id}/`);
         setNgo(ngoResponse.data);
         
-        // Fetch animals associated with this NGO
-        const animalsResponse = await axios.get(`/api/animals/?ngo=${id}`);
+        // Fetch animals associated with this NGO - usar URL completo para evitar problemas com o proxy
+        const animalsResponse = await axios.get(`http://localhost:8000/api/animals/?ngo=${id}`);
         setAnimals(animalsResponse.data.results || []);
       } catch (err) {
-        setError('Failed to load NGO details. Please try again later.');
+        setError('Falha ao carregar detalhes da ONG. Por favor, tente novamente mais tarde.');
         console.error('Error fetching NGO details:', err);
       } finally {
         setLoading(false);

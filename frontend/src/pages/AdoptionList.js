@@ -16,10 +16,11 @@ const AdoptionList = () => {
       
       setLoading(true);
       try {
-        const response = await axios.get(`/api/adoptions/?user=${user.id}`);
+        // Usar URL completo para evitar problemas com o proxy
+        const response = await axios.get(`http://localhost:8000/api/adoptions/?user=${user.id}`);
         setAdoptions(response.data.results || []);
       } catch (err) {
-        setError('Failed to load your adoption requests. Please try again later.');
+        setError('Falha ao carregar suas solicitações de adoção. Por favor, tente novamente mais tarde.');
         console.error('Error fetching adoptions:', err);
       } finally {
         setLoading(false);

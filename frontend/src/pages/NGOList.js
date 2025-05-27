@@ -21,7 +21,8 @@ const NGOList = () => {
     // Fetch unique cities for filter
     const fetchCities = async () => {
       try {
-        const response = await axios.get('/api/ngos/');
+        // Usar URL completo para evitar problemas com o proxy
+        const response = await axios.get('http://localhost:8000/api/ngos/');
         const uniqueCities = [...new Set(response.data.results.map(ngo => ngo.city))];
         setCities(uniqueCities.sort());
       } catch (error) {
@@ -35,7 +36,8 @@ const NGOList = () => {
   const fetchNGOs = async () => {
     setLoading(true);
     try {
-      let url = `/api/ngos/?page=${page}`;
+      // Usar URL completo para evitar problemas com o proxy
+      let url = `http://localhost:8000/api/ngos/?page=${page}`;
       
       if (cityFilter) {
         url += `&city=${cityFilter}`;
@@ -53,7 +55,7 @@ const NGOList = () => {
       const pageSize = 10; // Assuming 10 items per page
       setTotalPages(Math.ceil(count / pageSize));
     } catch (err) {
-      setError('Failed to fetch NGOs. Please try again later.');
+      setError('Falha ao buscar ONGs. Por favor, tente novamente mais tarde.');
       console.error('Error fetching NGOs:', err);
     } finally {
       setLoading(false);
