@@ -9,10 +9,16 @@ export const AuthProvider = ({ children }) => {
   const [error, setError] = useState(null);
 
   useEffect(() => {
-    // Check if user is already logged in by loading from localStorage
+    // Verificar se o usuário já está logado carregando do localStorage
     const storedUser = localStorage.getItem('user');
     if (storedUser) {
-      setUser(JSON.parse(storedUser));
+      const userData = JSON.parse(storedUser);
+      setUser(userData);
+      
+      // Configurar o cabeçalho de autorização para requisições
+      if (userData.token) {
+        axios.defaults.headers.common['Authorization'] = `Token ${userData.token}`;
+      }
     }
     setLoading(false);
   }, []);
@@ -21,20 +27,20 @@ export const AuthProvider = ({ children }) => {
     setLoading(true);
     setError(null);
     try {
-      // Basic authentication with Django REST framework
+      // Autenticação com token usando Django REST framework
       const response = await axios.post('/api/auth/login/', { username, password });
       const userData = response.data;
       
-      // Store user in localStorage and context
+      // Armazenar usuário no localStorage e contexto
       localStorage.setItem('user', JSON.stringify(userData));
       setUser(userData);
       
-      // Set default Authorization header for future requests
+      // Definir cabeçalho de autorização padrão para requisições futuras
       axios.defaults.headers.common['Authorization'] = `Token ${userData.token}`;
       
       return true;
     } catch (err) {
-      setError(err.response?.data?.detail || 'Login failed. Please check your credentials.');
+      setError(err.response?.data?.non_field_errors?.[0] || 'Falha no login. Verifique suas credenciais.');
       return false;
     } finally {
       setLoading(false);
@@ -45,10 +51,34 @@ export const AuthProvider = ({ children }) => {
     setLoading(true);
     setError(null);
     try {
-      await axios.post('/api/auth/register/', userData);
+      const response = await axios.post('/api/auth/register/', userData);
+      // Se quiser fazer login automático após o registro, descomente o código abaixo
+      // localStorage.setItem('user', JSON.stringify(response.data));
+      // setUser(response.data);
+      // axios.defaults.headers.common['Authorization'] = `Token ${response.data.token}`;
       return true;
     } catch (err) {
-      setError(err.response?.data || 'Registration failed. Please try again.');
+      // Extrai mensagens de erro da resposta do Django REST
+      let errorMessage = 'Falha no cadastro. Por favor, tente novamente.';
+      if (err.response?.data) {
+        // Tentativa de formatar os erros de uma maneira mais amigável
+        const errors = err.response.data;
+        const errorMessages = [];
+        
+        Object.keys(errors).forEach(key => {
+          if (Array.isArray(errors[key])) {
+            errorMessages.push(`${key}: ${errors[key].join(', ')}`);
+          } else {
+            errorMessages.push(`${key}: ${errors[key]}`);
+          }
+        });
+        
+        if (errorMessages.length > 0) {
+          errorMessage = errorMessages.join('\n');
+        }
+      }
+      
+      setError(errorMessage);
       return false;
     } finally {
       setLoading(false);

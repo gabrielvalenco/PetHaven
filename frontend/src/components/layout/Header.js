@@ -22,35 +22,35 @@ const Header = () => {
         <Navbar.Toggle aria-controls="basic-navbar-nav" />
         <Navbar.Collapse id="basic-navbar-nav">
           <Nav className="me-auto">
-            <Nav.Link as={Link} to="/">Home</Nav.Link>
-            <Nav.Link as={Link} to="/animals">Animals</Nav.Link>
-            <Nav.Link as={Link} to="/ngos">NGOs</Nav.Link>
+            <Nav.Link as={Link} to="/">Início</Nav.Link>
+            <Nav.Link as={Link} to="/animals">Animais</Nav.Link>
+            <Nav.Link as={Link} to="/ngos">ONGs</Nav.Link>
             {isAuthenticated && (
-              <Nav.Link as={Link} to="/adoptions">My Adoptions</Nav.Link>
+              <Nav.Link as={Link} to="/adoptions">Minhas Adoções</Nav.Link>
             )}
           </Nav>
           <Nav>
             {isAuthenticated ? (
               <>
                 <Nav.Link as={Link} to="/profile" className="me-2">
-                  Welcome, {user.username}
+                  Olá, {user.username}
                 </Nav.Link>
                 <Button 
                   variant="outline-primary" 
                   onClick={handleLogout}
                 >
-                  Logout
+                  Sair
                 </Button>
               </>
             ) : (
               <>
-                <Nav.Link as={Link} to="/login" className="me-2">Login</Nav.Link>
+                <Nav.Link as={Link} to="/login" className="me-2">Entrar</Nav.Link>
                 <Button 
                   variant="primary" 
                   as={Link} 
                   to="/register"
                 >
-                  Register
+                  Cadastrar
                 </Button>
               </>
             )}

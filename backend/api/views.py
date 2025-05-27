@@ -31,7 +31,7 @@ class UserViewSet(viewsets.ModelViewSet):
 class NGOViewSet(viewsets.ModelViewSet):
     queryset = NGO.objects.all()
     serializer_class = NGOSerializer
-    permission_classes = [permissions.IsAuthenticated]
+    permission_classes = [permissions.IsAuthenticatedOrReadOnly]
     filter_backends = [filters.SearchFilter, DjangoFilterBackend]
     search_fields = ['name', 'city', 'email']
     filterset_fields = ['city']
@@ -46,7 +46,7 @@ class NGOViewSet(viewsets.ModelViewSet):
 class AnimalViewSet(viewsets.ModelViewSet):
     queryset = Animal.objects.all()
     serializer_class = AnimalSerializer
-    permission_classes = [permissions.IsAuthenticated]
+    permission_classes = [permissions.IsAuthenticatedOrReadOnly]
     filter_backends = [filters.SearchFilter, DjangoFilterBackend, filters.OrderingFilter]
     search_fields = ['name', 'breed', 'description']
     filterset_fields = ['type', 'size', 'gender', 'ngo', 'is_available']

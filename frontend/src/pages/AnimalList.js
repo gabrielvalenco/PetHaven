@@ -84,7 +84,7 @@ const AnimalList = () => {
 
   return (
     <Container className="my-4">
-      <h1 className="mb-4">Find Your Perfect Companion</h1>
+      <h1 className="mb-4">Encontre Seu Companheiro Perfeito</h1>
       
       {/* Filters */}
       <Card className="mb-4">
@@ -93,12 +93,12 @@ const AnimalList = () => {
             <Col md={4} className="mb-3 mb-md-0">
               <InputGroup>
                 <Form.Control
-                  placeholder="Search by name or breed..."
+                  placeholder="Buscar por nome ou raça..."
                   value={filters.search}
                   onChange={handleSearchChange}
                 />
                 <Button variant="primary" onClick={() => fetchAnimals()}>
-                  Search
+                  Buscar
                 </Button>
               </InputGroup>
             </Col>
@@ -111,10 +111,10 @@ const AnimalList = () => {
                       value={filters.type}
                       onChange={handleFilterChange}
                     >
-                      <option value="">All Types</option>
-                      <option value="dog">Dogs</option>
-                      <option value="cat">Cats</option>
-                      <option value="other">Other</option>
+                      <option value="">Todos os Tipos</option>
+                      <option value="dog">Cães</option>
+                      <option value="cat">Gatos</option>
+                      <option value="other">Outros</option>
                     </Form.Select>
                   </Form.Group>
                 </Col>
@@ -125,10 +125,10 @@ const AnimalList = () => {
                       value={filters.size}
                       onChange={handleFilterChange}
                     >
-                      <option value="">All Sizes</option>
-                      <option value="small">Small</option>
-                      <option value="medium">Medium</option>
-                      <option value="large">Large</option>
+                      <option value="">Todos os Tamanhos</option>
+                      <option value="small">Pequeno</option>
+                      <option value="medium">Médio</option>
+                      <option value="large">Grande</option>
                     </Form.Select>
                   </Form.Group>
                 </Col>
@@ -139,9 +139,9 @@ const AnimalList = () => {
                       value={filters.gender}
                       onChange={handleFilterChange}
                     >
-                      <option value="">All Genders</option>
-                      <option value="male">Male</option>
-                      <option value="female">Female</option>
+                      <option value="">Todos os Gêneros</option>
+                      <option value="male">Macho</option>
+                      <option value="female">Fêmea</option>
                     </Form.Select>
                   </Form.Group>
                 </Col>
@@ -150,7 +150,7 @@ const AnimalList = () => {
                     <Form.Check
                       type="checkbox"
                       id="available-only"
-                      label="Available"
+                      label="Disponível"
                       checked={filters.available}
                       onChange={handleAvailableChange}
                     />
@@ -166,18 +166,18 @@ const AnimalList = () => {
       {loading ? (
         <div className="text-center my-5">
           <Spinner animation="border" role="status" variant="primary">
-            <span className="visually-hidden">Loading...</span>
+            <span className="visually-hidden">Carregando...</span>
           </Spinner>
         </div>
       ) : error ? (
         <div className="text-center my-5">
           <p className="text-danger">{error}</p>
-          <Button variant="primary" onClick={fetchAnimals}>Try Again</Button>
+          <Button variant="primary" onClick={fetchAnimals}>Tentar Novamente</Button>
         </div>
       ) : animals.length === 0 ? (
         <div className="text-center my-5">
-          <h3>No animals found matching your criteria</h3>
-          <p>Try adjusting your filters or search terms</p>
+          <h3>Nenhum animal encontrado com esses critérios</h3>
+          <p>Tente ajustar seus filtros ou termos de busca</p>
         </div>
       ) : (
         <>
@@ -209,7 +209,7 @@ const AnimalList = () => {
                         variant="outline-primary" 
                         size="sm"
                       >
-                        View Details
+                        Ver Detalhes
                       </Button>
                     </div>
                   </Card.Body>
@@ -227,17 +227,17 @@ const AnimalList = () => {
                 disabled={page === 1}
                 className="me-2"
               >
-                Previous
+                Anterior
               </Button>
               <div className="d-flex align-items-center mx-3">
-                Page {page} of {totalPages}
+                Página {page} de {totalPages}
               </div>
               <Button
                 variant="outline-primary"
                 onClick={() => handlePageChange(page + 1)}
                 disabled={page === totalPages}
               >
-                Next
+                Próxima
               </Button>
             </div>
           )}

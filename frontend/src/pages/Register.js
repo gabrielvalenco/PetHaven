@@ -56,8 +56,8 @@ const Register = () => {
           <Card className="shadow">
             <Card.Body className="p-4">
               <div className="text-center mb-4">
-                <h2>Create Account</h2>
-                <p className="text-muted">Join PetHaven and find your perfect companion</p>
+                <h2>Criar Conta</h2>
+                <p className="text-muted">Junte-se ao PetHaven e encontre seu companheiro perfeito</p>
               </div>
               
               {error && <Alert variant="danger">{error}</Alert>}
@@ -66,17 +66,17 @@ const Register = () => {
                 <Row>
                   <Col md={6}>
                     <Form.Group className="mb-3" controlId="username">
-                      <Form.Label>Username</Form.Label>
+                      <Form.Label>Nome de Usuário</Form.Label>
                       <Form.Control
                         type="text"
                         name="username"
-                        placeholder="Choose a username"
+                        placeholder="Escolha um nome de usuário"
                         value={formData.username}
                         onChange={handleChange}
                         required
                       />
                       <Form.Control.Feedback type="invalid">
-                        Please choose a username.
+                        Por favor, escolha um nome de usuário.
                       </Form.Control.Feedback>
                     </Form.Group>
                   </Col>
@@ -86,13 +86,13 @@ const Register = () => {
                       <Form.Control
                         type="email"
                         name="email"
-                        placeholder="Enter your email"
+                        placeholder="Digite seu email"
                         value={formData.email}
                         onChange={handleChange}
                         required
                       />
                       <Form.Control.Feedback type="invalid">
-                        Please enter a valid email.
+                        Por favor, digite um email válido.
                       </Form.Control.Feedback>
                     </Form.Group>
                   </Col>
@@ -101,33 +101,33 @@ const Register = () => {
                 <Row>
                   <Col md={6}>
                     <Form.Group className="mb-3" controlId="first_name">
-                      <Form.Label>First Name</Form.Label>
+                      <Form.Label>Nome</Form.Label>
                       <Form.Control
                         type="text"
                         name="first_name"
-                        placeholder="Enter your first name"
+                        placeholder="Digite seu nome"
                         value={formData.first_name}
                         onChange={handleChange}
                         required
                       />
                       <Form.Control.Feedback type="invalid">
-                        Please enter your first name.
+                        Por favor, digite seu nome.
                       </Form.Control.Feedback>
                     </Form.Group>
                   </Col>
                   <Col md={6}>
                     <Form.Group className="mb-3" controlId="last_name">
-                      <Form.Label>Last Name</Form.Label>
+                      <Form.Label>Sobrenome</Form.Label>
                       <Form.Control
                         type="text"
                         name="last_name"
-                        placeholder="Enter your last name"
+                        placeholder="Digite seu sobrenome"
                         value={formData.last_name}
                         onChange={handleChange}
                         required
                       />
                       <Form.Control.Feedback type="invalid">
-                        Please enter your last name.
+                        Por favor, digite seu sobrenome.
                       </Form.Control.Feedback>
                     </Form.Group>
                   </Col>
@@ -136,34 +136,34 @@ const Register = () => {
                 <Row>
                   <Col md={6}>
                     <Form.Group className="mb-3" controlId="password">
-                      <Form.Label>Password</Form.Label>
+                      <Form.Label>Senha</Form.Label>
                       <Form.Control
                         type="password"
                         name="password"
-                        placeholder="Create a password"
+                        placeholder="Crie uma senha"
                         value={formData.password}
                         onChange={handleChange}
                         required
                         minLength={8}
                       />
                       <Form.Control.Feedback type="invalid">
-                        Password must be at least 8 characters.
+                        A senha deve ter pelo menos 8 caracteres.
                       </Form.Control.Feedback>
                     </Form.Group>
                   </Col>
                   <Col md={6}>
                     <Form.Group className="mb-3" controlId="password2">
-                      <Form.Label>Confirm Password</Form.Label>
+                      <Form.Label>Confirmar Senha</Form.Label>
                       <Form.Control
                         type="password"
                         name="password2"
-                        placeholder="Confirm your password"
+                        placeholder="Confirme sua senha"
                         value={formData.password2}
                         onChange={handleChange}
                         required
                       />
                       <Form.Control.Feedback type="invalid">
-                        Please confirm your password.
+                        Por favor, confirme sua senha.
                       </Form.Control.Feedback>
                     </Form.Group>
                   </Col>
@@ -176,16 +176,16 @@ const Register = () => {
                     type="submit"
                     disabled={loading}
                   >
-                    {loading ? 'Creating Account...' : 'Create Account'}
+                    {loading ? 'Criando Conta...' : 'Criar Conta'}
                   </Button>
                 </div>
               </Form>
               
               <div className="text-center mt-4">
                 <p>
-                  Already have an account?{' '}
+                  Já tem uma conta?{' '}
                   <Link to="/login" className="text-decoration-none">
-                    Sign In
+                    Entrar
                   </Link>
                 </p>
               </div>

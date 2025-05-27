@@ -2,6 +2,92 @@ import React, { useState, useEffect } from 'react';
 import { Container, Row, Col, Card, Button, Carousel } from 'react-bootstrap';
 import { Link } from 'react-router-dom';
 import axios from 'axios';
+import { motion } from 'framer-motion';
+import styled from 'styled-components';
+
+// Componentes de animação
+import FadeIn from '../components/animations/FadeIn';
+import SlideIn from '../components/animations/SlideIn';
+import PopIn from '../components/animations/PopIn';
+
+// Componentes estilizados
+const HeroSection = styled.div`
+  background: linear-gradient(135deg, var(--primary) 0%, var(--primary-dark) 100%);
+  color: white;
+  padding: 4rem 0;
+  border-radius: var(--radius-lg);
+  margin-bottom: 3rem;
+  box-shadow: var(--shadow-lg);
+  position: relative;
+  overflow: hidden;
+  
+  &::before {
+    content: '';
+    position: absolute;
+    top: -50px;
+    right: -50px;
+    width: 200px;
+    height: 200px;
+    background: rgba(255, 255, 255, 0.1);
+    border-radius: 50%;
+  }
+  
+  &::after {
+    content: '';
+    position: absolute;
+    bottom: -30px;
+    left: -30px;
+    width: 120px;
+    height: 120px;
+    background: rgba(255, 255, 255, 0.1);
+    border-radius: 50%;
+  }
+`;
+
+const StyledCard = styled(Card)`
+  border: none;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  box-shadow: var(--shadow-sm);
+  border-radius: var(--radius-md);
+  overflow: hidden;
+  height: 100%;
+  
+  &:hover {
+    transform: translateY(-8px);
+    box-shadow: var(--shadow-md);
+  }
+  
+  .card-img-top {
+    height: 200px;
+    object-fit: cover;
+    transition: transform 0.5s ease;
+  }
+  
+  &:hover .card-img-top {
+    transform: scale(1.05);
+  }
+`;
+
+const StatsCounter = styled.div`
+  text-align: center;
+  background-color: var(--light);
+  padding: 2rem 0;
+  border-radius: var(--radius-md);
+  margin: 3rem 0;
+  box-shadow: var(--shadow-sm);
+  
+  .counter {
+    font-size: 2.5rem;
+    font-weight: bold;
+    color: var(--primary);
+    margin-bottom: 0.5rem;
+  }
+  
+  .counter-title {
+    color: var(--dark);
+    font-size: 1.2rem;
+  }
+`;
 
 const Home = () => {
   const [featuredAnimals, setFeaturedAnimals] = useState([]);
@@ -25,14 +111,14 @@ const Home = () => {
   return (
     <Container>
       {/* Hero Section */}
-      <div className="py-5 mb-5 bg-light rounded-3">
+      <HeroSection className="py-5 mb-5 rounded-3">
         <Container>
           <Row>
             <Col md={6} className="d-flex flex-column justify-content-center">
-              <h1 className="display-4 fw-bold">Find Your Forever Friend</h1>
+              <h1 className="display-4 fw-bold">Encontre Seu Amigo Para Sempre</h1>
               <p className="lead">
-                PetHaven connects loving homes with animals in need of adoption.
-                Browse our collection of adorable pets waiting for a second chance.
+                PetHaven conecta lares amorosos com animais que precisam de adoção.
+                Navegue em nossa coleção de pets adoráveis esperando por uma segunda chance.
               </p>
               <div>
                 <Button 
@@ -42,7 +128,7 @@ const Home = () => {
                   size="lg" 
                   className="me-2"
                 >
-                  Browse Animals
+                  Ver Animais
                 </Button>
                 <Button 
                   as={Link} 
@@ -50,7 +136,7 @@ const Home = () => {
                   variant="outline-primary" 
                   size="lg"
                 >
-                  Sign Up
+                  Cadastre-se
                 </Button>
               </div>
             </Col>
@@ -76,18 +162,18 @@ const Home = () => {
             </Col>
           </Row>
         </Container>
-      </div>
+      </HeroSection>
 
       {/* Featured Animals Section */}
       <section className="mb-5">
-        <h2 className="text-center mb-4">Featured Pets</h2>
+        <h2 className="text-center mb-4">Pets em Destaque</h2>
         <Row>
           {loading ? (
-            <p className="text-center">Loading featured pets...</p>
+            <p className="text-center">Carregando pets em destaque...</p>
           ) : featuredAnimals.length > 0 ? (
             featuredAnimals.map(animal => (
               <Col key={animal.id} md={4} className="mb-4">
-                <Card className="h-100 shadow-sm">
+                <StyledCard className="h-100 shadow-sm">
                   <Card.Img 
                     variant="top" 
                     src={animal.photo || 'https://via.placeholder.com/300x200?text=No+Image'}
@@ -104,47 +190,47 @@ const Home = () => {
                       to={`/animals/${animal.id}`} 
                       variant="outline-primary"
                     >
-                      View Details
+                      Ver Detalhes
                     </Button>
                   </Card.Body>
-                </Card>
+                </StyledCard>
               </Col>
             ))
           ) : (
-            <p className="text-center">No featured pets available at the moment.</p>
+            <p className="text-center">Não há pets em destaque disponíveis no momento.</p>
           )}
         </Row>
         <div className="text-center mt-4">
           <Button as={Link} to="/animals" variant="primary">
-            View All Animals
+            Ver Todos os Animais
           </Button>
         </div>
       </section>
 
       {/* How It Works Section */}
       <section className="mb-5 py-5 bg-light rounded">
-        <h2 className="text-center mb-4">How It Works</h2>
+        <h2 className="text-center mb-4">Como Funciona</h2>
         <Row className="text-center">
           <Col md={4} className="mb-4">
             <div className="rounded-circle bg-primary text-white d-flex align-items-center justify-content-center mx-auto mb-3" style={{ width: '80px', height: '80px' }}>
               <h3 className="mb-0">1</h3>
             </div>
-            <h4>Browse Animals</h4>
-            <p>Search through our collection of animals based on type, breed, age, and size.</p>
+            <h4>Procure Animais</h4>
+            <p>Pesquise em nossa coleção de animais por tipo, raça, idade e tamanho.</p>
           </Col>
           <Col md={4} className="mb-4">
             <div className="rounded-circle bg-primary text-white d-flex align-items-center justify-content-center mx-auto mb-3" style={{ width: '80px', height: '80px' }}>
               <h3 className="mb-0">2</h3>
             </div>
-            <h4>Request Adoption</h4>
-            <p>Find your perfect companion and submit an adoption request.</p>
+            <h4>Solicite Adoção</h4>
+            <p>Encontre seu companheiro perfeito e envie uma solicitação de adoção.</p>
           </Col>
           <Col md={4} className="mb-4">
             <div className="rounded-circle bg-primary text-white d-flex align-items-center justify-content-center mx-auto mb-3" style={{ width: '80px', height: '80px' }}>
               <h3 className="mb-0">3</h3>
             </div>
-            <h4>Welcome Home</h4>
-            <p>Once approved, welcome your new family member to their forever home!</p>
+            <h4>Bem-vindo ao Lar</h4>
+            <p>Uma vez aprovado, dê as boas-vindas ao novo membro da família ao seu lar para sempre!</p>
           </Col>
         </Row>
       </section>

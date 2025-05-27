@@ -37,38 +37,38 @@ const Login = () => {
           <Card className="shadow">
             <Card.Body className="p-4">
               <div className="text-center mb-4">
-                <h2>Welcome Back</h2>
-                <p className="text-muted">Sign in to your PetHaven account</p>
+                <h2>Bem-vindo de Volta</h2>
+                <p className="text-muted">Entre na sua conta PetHaven</p>
               </div>
               
               {error && <Alert variant="danger">{error}</Alert>}
               
               <Form noValidate validated={validated} onSubmit={handleSubmit}>
                 <Form.Group className="mb-3" controlId="username">
-                  <Form.Label>Username</Form.Label>
+                  <Form.Label>Nome de Usuário</Form.Label>
                   <Form.Control
                     type="text"
-                    placeholder="Enter your username"
+                    placeholder="Digite seu nome de usuário"
                     value={username}
                     onChange={(e) => setUsername(e.target.value)}
                     required
                   />
                   <Form.Control.Feedback type="invalid">
-                    Please enter your username.
+                    Por favor, digite seu nome de usuário.
                   </Form.Control.Feedback>
                 </Form.Group>
 
                 <Form.Group className="mb-4" controlId="password">
-                  <Form.Label>Password</Form.Label>
+                  <Form.Label>Senha</Form.Label>
                   <Form.Control
                     type="password"
-                    placeholder="Enter your password"
+                    placeholder="Digite sua senha"
                     value={password}
                     onChange={(e) => setPassword(e.target.value)}
                     required
                   />
                   <Form.Control.Feedback type="invalid">
-                    Please enter your password.
+                    Por favor, digite sua senha.
                   </Form.Control.Feedback>
                 </Form.Group>
 
@@ -79,16 +79,16 @@ const Login = () => {
                     type="submit"
                     disabled={loading}
                   >
-                    {loading ? 'Signing in...' : 'Sign In'}
+                    {loading ? 'Entrando...' : 'Entrar'}
                   </Button>
                 </div>
               </Form>
               
               <div className="text-center mt-4">
                 <p>
-                  Don't have an account?{' '}
+                  Não tem uma conta?{' '}
                   <Link to="/register" className="text-decoration-none">
-                    Sign Up
+                    Cadastre-se
                   </Link>
                 </p>
               </div>

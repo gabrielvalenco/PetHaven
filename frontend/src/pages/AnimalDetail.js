@@ -59,9 +59,9 @@ const AnimalDetail = () => {
       });
       
       setAdoptionStatus('pending');
-      setAdoptionMessage('Your adoption request has been submitted successfully! The NGO will review your application soon.');
+      setAdoptionMessage('Sua solicitação de adoção foi enviada com sucesso! A ONG irá analisar seu pedido em breve.');
     } catch (err) {
-      setAdoptionMessage('Failed to submit adoption request. Please try again later.');
+      setAdoptionMessage('Falha ao enviar solicitação de adoção. Por favor, tente novamente mais tarde.');
       console.error('Error submitting adoption request:', err);
     } finally {
       setAdoptionLoading(false);
@@ -72,7 +72,7 @@ const AnimalDetail = () => {
     return (
       <Container className="text-center my-5">
         <Spinner animation="border" role="status" variant="primary">
-          <span className="visually-hidden">Loading...</span>
+          <span className="visually-hidden">Carregando...</span>
         </Spinner>
       </Container>
     );
@@ -82,10 +82,10 @@ const AnimalDetail = () => {
     return (
       <Container className="text-center my-5">
         <Alert variant="danger">
-          {error || 'Animal not found'}
+          {error || 'Animal não encontrado'}
         </Alert>
         <Button as={Link} to="/animals" variant="primary" className="mt-3">
-          Back to Animals
+          Voltar para Animais
         </Button>
       </Container>
     );
@@ -119,9 +119,9 @@ const AnimalDetail = () => {
           <div className="d-flex justify-content-between align-items-center mb-3">
             <h1>{animal.name}</h1>
             {animal.is_available ? (
-              <Badge bg="success" className="p-2">Available</Badge>
+              <Badge bg="success" className="p-2">Disponível</Badge>
             ) : (
-              <Badge bg="danger" className="p-2">Not Available</Badge>
+              <Badge bg="danger" className="p-2">Indisponível</Badge>
             )}
           </div>
           
@@ -131,32 +131,32 @@ const AnimalDetail = () => {
             <Col xs={6} md={3}>
               <div className="text-center p-2 bg-light rounded mb-2">
                 <p className="mb-0 fw-bold">{animal.type_display}</p>
-                <small>Type</small>
+                <small>Tipo</small>
               </div>
             </Col>
             <Col xs={6} md={3}>
               <div className="text-center p-2 bg-light rounded mb-2">
                 <p className="mb-0 fw-bold">{animal.age}</p>
-                <small>Months</small>
+                <small>Meses</small>
               </div>
             </Col>
             <Col xs={6} md={3}>
               <div className="text-center p-2 bg-light rounded mb-2">
                 <p className="mb-0 fw-bold">{animal.gender_display}</p>
-                <small>Gender</small>
+                <small>Gênero</small>
               </div>
             </Col>
             <Col xs={6} md={3}>
               <div className="text-center p-2 bg-light rounded mb-2">
                 <p className="mb-0 fw-bold">{animal.size_display}</p>
-                <small>Size</small>
+                <small>Tamanho</small>
               </div>
             </Col>
           </Row>
           
           <Card className="mb-4">
             <Card.Body>
-              <Card.Title>About {animal.name}</Card.Title>
+              <Card.Title>Sobre {animal.name}</Card.Title>
               <Card.Text>
                 {animal.description}
               </Card.Text>
@@ -165,9 +165,9 @@ const AnimalDetail = () => {
           
           <Card className="mb-4">
             <Card.Body>
-              <Card.Title>NGO Information</Card.Title>
+              <Card.Title>Informações da ONG</Card.Title>
               <Card.Text>
-                <strong>Organization:</strong> {animal.ngo_name}<br />
+                <strong>Organização:</strong> {animal.ngo_name}<br />
                 {/* We could add more NGO details here when available */}
               </Card.Text>
               <Button 
@@ -176,7 +176,7 @@ const AnimalDetail = () => {
                 variant="outline-primary" 
                 size="sm"
               >
-                View NGO Details
+                Ver Detalhes da ONG
               </Button>
             </Card.Body>
           </Card>
@@ -191,16 +191,19 @@ const AnimalDetail = () => {
                   'warning'
                 }>
                   <Alert.Heading>
-                    Adoption Status: {adoptionStatus.charAt(0).toUpperCase() + adoptionStatus.slice(1)}
+                    Status da Adoção: {adoptionStatus === 'pending' ? 'Pendente' : 
+                      adoptionStatus === 'approved' ? 'Aprovada' : 
+                      adoptionStatus === 'rejected' ? 'Rejeitada' : 
+                      adoptionStatus === 'cancelled' ? 'Cancelada' : adoptionStatus}
                   </Alert.Heading>
                   {adoptionStatus === 'pending' && (
-                    <p>Your adoption request is currently being reviewed by the NGO.</p>
+                    <p>Sua solicitação de adoção está sendo analisada pela ONG.</p>
                   )}
                   {adoptionStatus === 'approved' && (
-                    <p>Congratulations! Your adoption request has been approved. The NGO will contact you shortly.</p>
+                    <p>Parabéns! Sua solicitação de adoção foi aprovada. A ONG entrará em contato em breve.</p>
                   )}
                   {adoptionStatus === 'rejected' && (
-                    <p>Unfortunately, your adoption request was not approved. Please contact the NGO for more information.</p>
+                    <p>Infelizmente, sua solicitação de adoção não foi aprovada. Por favor, entre em contato com a ONG para mais informações.</p>
                   )}
                 </Alert>
               ) : (
@@ -211,13 +214,13 @@ const AnimalDetail = () => {
                   onClick={handleAdoptRequest}
                   disabled={adoptionLoading}
                 >
-                  {adoptionLoading ? 'Submitting Request...' : 'Request Adoption'}
+                  {adoptionLoading ? 'Enviando Solicitação...' : 'Solicitar Adoção'}
                 </Button>
               )}
             </div>
           ) : (
             <Alert variant="secondary">
-              This animal is no longer available for adoption.
+              Este animal não está mais disponível para adoção.
             </Alert>
           )}
         </Col>
@@ -225,7 +228,7 @@ const AnimalDetail = () => {
       
       <div className="mt-4">
         <Button as={Link} to="/animals" variant="outline-primary">
-          Back to All Animals
+          Voltar para Todos os Animais
         </Button>
       </div>
     </Container>

@@ -1,6 +1,12 @@
-import React from 'react';
-import { Routes, Route } from 'react-router-dom';
+import React, { useEffect } from 'react';
+import { Routes, Route, useLocation } from 'react-router-dom';
 import { Container } from 'react-bootstrap';
+import { AnimatePresence } from 'framer-motion';
+import AOS from 'aos';
+import 'aos/dist/aos.css';
+
+// Estilos globais
+import GlobalStyles from './styles/GlobalStyles';
 
 // Layout Components
 import Header from './components/layout/Header';
@@ -22,11 +28,24 @@ import NotFound from './pages/NotFound';
 import ProtectedRoute from './components/auth/ProtectedRoute';
 
 function App() {
+  const location = useLocation();
+  
+  // Inicializar AOS (Animate On Scroll)
+  useEffect(() => {
+    AOS.init({
+      duration: 800,
+      once: false,
+      mirror: true
+    });
+  }, []);
+  
   return (
     <div className="d-flex flex-column min-vh-100">
+      <GlobalStyles />
       <Header />
       <Container className="flex-grow-1 py-4">
-        <Routes>
+        <AnimatePresence mode="wait">
+          <Routes location={location} key={location.pathname}>
           <Route path="/" element={<Home />} />
           <Route path="/login" element={<Login />} />
           <Route path="/register" element={<Register />} />
@@ -55,7 +74,8 @@ function App() {
           
           {/* Not Found Route */}
           <Route path="*" element={<NotFound />} />
-        </Routes>
+          </Routes>
+        </AnimatePresence>
       </Container>
       <Footer />
     </div>
