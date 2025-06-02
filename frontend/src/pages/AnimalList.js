@@ -24,7 +24,8 @@ const AnimalList = () => {
   const fetchAnimals = async () => {
     setLoading(true);
     try {
-      let url = `/api/animals/?page=${page}`;
+      // Usar URL completo para evitar problemas com o proxy
+      let url = `http://localhost:8000/api/animals/?page=${page}`;
       
       if (filters.search) {
         url += `&search=${filters.search}`;
@@ -54,7 +55,7 @@ const AnimalList = () => {
       const pageSize = 10; // Assuming 10 items per page
       setTotalPages(Math.ceil(count / pageSize));
     } catch (err) {
-      setError('Failed to fetch animals. Please try again later.');
+      setError('Falha ao buscar animais. Por favor, tente novamente mais tarde.');
       console.error('Error fetching animals:', err);
     } finally {
       setLoading(false);
@@ -194,15 +195,15 @@ const AnimalList = () => {
                   <Card.Body>
                     <Card.Title>{animal.name}</Card.Title>
                     <Card.Text className="mb-1">
-                      <small className="text-muted">
+                      <small className="text-dark">
                         {animal.type_display} • {animal.gender_display}
                       </small>
                     </Card.Text>
-                    <Card.Text className="mb-2">
-                      {animal.breed} • {animal.age} months
+                    <Card.Text className="mb-2 text-dark">
+                      {animal.breed} • {animal.age} meses
                     </Card.Text>
                     <div className="d-flex justify-content-between align-items-center">
-                      <small className="text-muted">{animal.ngo_name}</small>
+                      <small className="text-dark">{animal.ngo_name}</small>
                       <Button 
                         as={Link} 
                         to={`/animals/${animal.id}`} 

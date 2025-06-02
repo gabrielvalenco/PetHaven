@@ -10,6 +10,8 @@ from django.contrib.auth import authenticate
 from .serializers import UserSerializer
 
 class CustomAuthToken(ObtainAuthToken):
+    permission_classes = [AllowAny]
+    
     def post(self, request, *args, **kwargs):
         serializer = self.serializer_class(data=request.data,
                                           context={'request': request})

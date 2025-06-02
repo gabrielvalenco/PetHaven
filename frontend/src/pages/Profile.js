@@ -42,12 +42,12 @@ const Profile = () => {
   const fetchUserData = async () => {
     setDataLoading(true);
     try {
-      // Fetch adoptions
-      const adoptionsResponse = await axios.get(`/api/adoptions/?user=${user.id}`);
+      // Fetch adoptions - usar URL completo para evitar problemas com o proxy
+      const adoptionsResponse = await axios.get(`http://localhost:8000/api/adoptions/?user=${user.id}`);
       setAdoptions(adoptionsResponse.data.results || []);
       
-      // Fetch reviews
-      const reviewsResponse = await axios.get(`/api/reviews/?user=${user.id}`);
+      // Fetch reviews - usar URL completo para evitar problemas com o proxy
+      const reviewsResponse = await axios.get(`http://localhost:8000/api/reviews/?user=${user.id}`);
       setReviews(reviewsResponse.data.results || []);
     } catch (error) {
       console.error('Error fetching user data:', error);
@@ -78,16 +78,17 @@ const Profile = () => {
     setMessage({ type: '', text: '' });
     
     try {
-      const response = await axios.put(`/api/users/${user.id}/`, profileData);
+      // Usar URL completo para evitar problemas com o proxy
+      const response = await axios.put(`http://localhost:8000/api/users/${user.id}/`, profileData);
       setMessage({
         type: 'success',
-        text: 'Profile updated successfully!'
+        text: 'Perfil atualizado com sucesso!'
       });
     } catch (error) {
       console.error('Error updating profile:', error);
       setMessage({
         type: 'danger',
-        text: 'Failed to update profile. Please try again.'
+        text: 'Falha ao atualizar o perfil. Por favor, tente novamente.'
       });
     } finally {
       setLoading(false);
@@ -100,7 +101,7 @@ const Profile = () => {
     if (password.new_password !== password.confirm_password) {
       setMessage({
         type: 'danger',
-        text: 'New passwords do not match.'
+        text: 'As novas senhas não coincidem.'
       });
       return;
     }
@@ -109,14 +110,15 @@ const Profile = () => {
     setMessage({ type: '', text: '' });
     
     try {
-      const response = await axios.post('/api/auth/password/change/', {
+      // Usar URL completo para evitar problemas com o proxy
+      const response = await axios.post('http://localhost:8000/api/auth/password/change/', {
         old_password: password.current_password,
         new_password: password.new_password
       });
       
       setMessage({
         type: 'success',
-        text: 'Password updated successfully!'
+        text: 'Senha atualizada com sucesso!'
       });
       
       // Clear password fields
@@ -129,7 +131,7 @@ const Profile = () => {
       console.error('Error changing password:', error);
       setMessage({
         type: 'danger',
-        text: error.response?.data?.detail || 'Failed to update password. Please try again.'
+        text: error.response?.data?.detail || 'Falha ao atualizar a senha. Por favor, tente novamente.'
       });
     } finally {
       setLoading(false);

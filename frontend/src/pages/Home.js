@@ -46,14 +46,14 @@ const HeroSection = styled.div`
 
 const StyledCard = styled(Card)`
   border: none;
-  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  transition: box-shadow 0.3s ease;
   box-shadow: var(--shadow-sm);
   border-radius: var(--radius-md);
   overflow: hidden;
   height: 100%;
+  background-color: var(--card-bg);
   
   &:hover {
-    transform: translateY(-8px);
     box-shadow: var(--shadow-md);
   }
   
@@ -66,11 +66,16 @@ const StyledCard = styled(Card)`
   &:hover .card-img-top {
     transform: scale(1.05);
   }
+  
+  .card-body {
+    background-color: var(--card-bg);
+    color: var(--text);
+  }
 `;
 
 const StatsCounter = styled.div`
   text-align: center;
-  background-color: var(--light);
+  background-color: var(--bg-accent);
   padding: 2rem 0;
   border-radius: var(--radius-md);
   margin: 3rem 0;
@@ -84,7 +89,7 @@ const StatsCounter = styled.div`
   }
   
   .counter-title {
-    color: var(--dark);
+    color: var(--text);
     font-size: 1.2rem;
   }
 `;
@@ -96,10 +101,13 @@ const Home = () => {
   useEffect(() => {
     const fetchFeaturedAnimals = async () => {
       try {
-        const response = await axios.get('/api/animals/?is_available=true&limit=6');
+        // Usar URL completo para evitar problemas com o proxy
+        const response = await axios.get('http://localhost:8000/api/animals/?is_available=true&limit=6');
         setFeaturedAnimals(response.data.results || []);
       } catch (error) {
         console.error('Error fetching featured animals:', error);
+        // Adicionar mensagem de erro para o usuário
+        alert('Falha ao carregar os animais. Por favor, verifique se o servidor backend está rodando.');
       } finally {
         setLoading(false);
       }
@@ -120,21 +128,22 @@ const Home = () => {
                 PetHaven conecta lares amorosos com animais que precisam de adoção.
                 Navegue em nossa coleção de pets adoráveis esperando por uma segunda chance.
               </p>
-              <div>
+              <div className="btn-group-responsive mt-3">
                 <Button 
                   as={Link} 
                   to="/animals" 
-                  variant="primary" 
+                  variant="light" 
                   size="lg" 
-                  className="me-2"
+                  className="rounded-pill px-4 py-2 fw-bold"
                 >
                   Ver Animais
                 </Button>
                 <Button 
                   as={Link} 
                   to="/register" 
-                  variant="outline-primary" 
+                  variant="light" 
                   size="lg"
+                  className="rounded-pill px-4 py-2 fw-bold"
                 >
                   Cadastre-se
                 </Button>
@@ -183,7 +192,7 @@ const Home = () => {
                   <Card.Body>
                     <Card.Title>{animal.name}</Card.Title>
                     <Card.Text>
-                      {animal.breed} • {animal.age} months old
+                      {animal.breed} • {animal.age} meses
                     </Card.Text>
                     <Button 
                       as={Link} 
@@ -208,7 +217,7 @@ const Home = () => {
       </section>
 
       {/* How It Works Section */}
-      <section className="mb-5 py-5 bg-light rounded">
+      <section className="mb-5 py-5 section-themed rounded">
         <h2 className="text-center mb-4">Como Funciona</h2>
         <Row className="text-center">
           <Col md={4} className="mb-4">

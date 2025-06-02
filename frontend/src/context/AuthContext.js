@@ -27,8 +27,8 @@ export const AuthProvider = ({ children }) => {
     setLoading(true);
     setError(null);
     try {
-      // Autenticação com token usando Django REST framework
-      const response = await axios.post('/api/auth/login/', { username, password });
+      // Autenticação com token usando Django REST framework - URL completo para evitar problemas com o proxy
+      const response = await axios.post('http://localhost:8000/api/auth/login/', { username, password });
       const userData = response.data;
       
       // Armazenar usuário no localStorage e contexto
@@ -51,7 +51,8 @@ export const AuthProvider = ({ children }) => {
     setLoading(true);
     setError(null);
     try {
-      const response = await axios.post('/api/auth/register/', userData);
+      // Usar URL completo para evitar problemas com o proxy
+      const response = await axios.post('http://localhost:8000/api/auth/register/', userData);
       // Se quiser fazer login automático após o registro, descomente o código abaixo
       // localStorage.setItem('user', JSON.stringify(response.data));
       // setUser(response.data);

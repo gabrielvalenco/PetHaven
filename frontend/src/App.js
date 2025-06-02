@@ -4,6 +4,7 @@ import { Container } from 'react-bootstrap';
 import { AnimatePresence } from 'framer-motion';
 import AOS from 'aos';
 import 'aos/dist/aos.css';
+import ThemeProvider from './context/ThemeContext';
 
 // Estilos globais
 import GlobalStyles from './styles/GlobalStyles';
@@ -40,10 +41,11 @@ function App() {
   }, []);
   
   return (
-    <div className="d-flex flex-column min-vh-100">
-      <GlobalStyles />
-      <Header />
-      <Container className="flex-grow-1 py-4">
+    <ThemeProvider>
+      <div className="d-flex flex-column min-vh-100">
+        <GlobalStyles />
+        <Header />
+        <Container className="flex-grow-1 py-4">
         <AnimatePresence mode="wait">
           <Routes location={location} key={location.pathname}>
           <Route path="/" element={<Home />} />
@@ -77,8 +79,9 @@ function App() {
           </Routes>
         </AnimatePresence>
       </Container>
-      <Footer />
-    </div>
+        <Footer />
+      </div>
+    </ThemeProvider>
   );
 }
 
