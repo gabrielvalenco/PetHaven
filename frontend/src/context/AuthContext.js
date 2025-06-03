@@ -1,5 +1,5 @@
 import React, { createContext, useState, useEffect } from 'react';
-import axios from 'axios';
+import { setAuthToken, apiAuthPost, fetchCSRFToken } from '../utils/api';
 
 export const AuthContext = createContext();
 
@@ -9,15 +9,20 @@ export const AuthProvider = ({ children }) => {
   const [error, setError] = useState(null);
 
   useEffect(() => {
-    // Verificar se o usuário já está logado carregando do localStorage
+    // Load user from localStorage on component mount
     const storedUser = localStorage.getItem('user');
     if (storedUser) {
-      const userData = JSON.parse(storedUser);
-      setUser(userData);
-      
-      // Configurar o cabeçalho de autorização para requisições
-      if (userData.token) {
-        axios.defaults.headers.common['Authorization'] = `Token ${userData.token}`;
+      try {
+        const userData = JSON.parse(storedUser);
+        setUser(userData);
+        // Note: We don't need to call setAuthToken here because
+        // our api.js utility already initializes the token on load
+      } catch (error) {
+        // If there's a problem with the stored data, clear it
+        console.error('Error parsing stored user data:', error);
+        localStorage.removeItem('user');
+        setUser(null);
+        setAuthToken(null);
       }
     }
     setLoading(false);
@@ -27,20 +32,31 @@ export const AuthProvider = ({ children }) => {
     setLoading(true);
     setError(null);
     try {
-      // Autenticação com token usando Django REST framework - URL completo para evitar problemas com o proxy
-      const response = await axios.post('http://localhost:8000/api/auth/login/', { username, password });
-      const userData = response.data;
+      // Fetch CSRF token and then use apiAuthPost utility for login
+      await fetchCSRFToken();
+      const result = await apiAuthPost('/auth/login/', { username, password });
       
-      // Armazenar usuário no localStorage e contexto
-      localStorage.setItem('user', JSON.stringify(userData));
-      setUser(userData);
-      
-      // Definir cabeçalho de autorização padrão para requisições futuras
-      axios.defaults.headers.common['Authorization'] = `Token ${userData.token}`;
-      
-      return true;
+      if (result.success) {
+        const userData = result.data;
+        console.log('Login successful:', userData);
+        
+        // Armazenar usuário no localStorage e contexto
+        localStorage.setItem('user', JSON.stringify(userData));
+        setUser(userData);
+        
+        // Definir cabeçalho de autorização padrão para requisições futuras
+        setAuthToken(userData.token);
+        
+        return true;
+      } else {
+        const errorMsg = result.error?.non_field_errors?.[0] || 'Falha no login. Verifique suas credenciais.';
+        console.error('Login error:', errorMsg);
+        setError(errorMsg);
+        return false;
+      }
     } catch (err) {
-      setError(err.response?.data?.non_field_errors?.[0] || 'Falha no login. Verifique suas credenciais.');
+      console.error('Unexpected login error:', err);
+      setError('Erro inesperado ao tentar fazer login. Tente novamente.');
       return false;
     } finally {
       setLoading(false);
@@ -51,48 +67,69 @@ export const AuthProvider = ({ children }) => {
     setLoading(true);
     setError(null);
     try {
-      // Usar URL completo para evitar problemas com o proxy
-      const response = await axios.post('http://localhost:8000/api/auth/register/', userData);
-      // Se quiser fazer login automático após o registro, descomente o código abaixo
-      // localStorage.setItem('user', JSON.stringify(response.data));
-      // setUser(response.data);
-      // axios.defaults.headers.common['Authorization'] = `Token ${response.data.token}`;
-      return true;
-    } catch (err) {
-      // Extrai mensagens de erro da resposta do Django REST
-      let errorMessage = 'Falha no cadastro. Por favor, tente novamente.';
-      if (err.response?.data) {
-        // Tentativa de formatar os erros de uma maneira mais amigável
-        const errors = err.response.data;
-        const errorMessages = [];
-        
-        Object.keys(errors).forEach(key => {
-          if (Array.isArray(errors[key])) {
-            errorMessages.push(`${key}: ${errors[key].join(', ')}`);
-          } else {
-            errorMessages.push(`${key}: ${errors[key]}`);
-          }
-        });
-        
-        if (errorMessages.length > 0) {
-          errorMessage = errorMessages.join('\n');
-        }
-      }
+      // Fetch CSRF token and then use apiAuthPost utility for registration
+      await fetchCSRFToken();
+      const result = await apiAuthPost('/auth/register/', userData);
       
-      setError(errorMessage);
+      if (result.success) {
+        console.log('Registration successful');
+        // Se quiser fazer login automático após o registro, descomente o código abaixo
+        // const userData = result.data;
+        // localStorage.setItem('user', JSON.stringify(userData));
+        // setUser(userData);
+        // setAuthToken(userData.token);
+        return true;
+      } else {
+        // Extrai mensagens de erro da resposta
+        let errorMessage = 'Falha no cadastro. Por favor, tente novamente.';
+        if (result.error) {
+          // Tentativa de formatar os erros de uma maneira mais amigável
+          const errors = result.error;
+          const errorMessages = [];
+          
+          Object.keys(errors).forEach(key => {
+            if (Array.isArray(errors[key])) {
+              errorMessages.push(`${key}: ${errors[key].join(', ')}`);
+            } else {
+              errorMessages.push(`${key}: ${errors[key]}`);
+            }
+          });
+          
+          if (errorMessages.length > 0) {
+            errorMessage = errorMessages.join('\n');
+          }
+        }
+        
+        console.error('Registration error:', errorMessage);
+        setError(errorMessage);
+        return false;
+      }
+    } catch (err) {
+      console.error('Unexpected registration error:', err);
+      setError('Erro inesperado ao tentar fazer o cadastro. Tente novamente.');
       return false;
     } finally {
       setLoading(false);
     }
   };
 
-  const logout = () => {
-    // Remove user from localStorage and context
-    localStorage.removeItem('user');
-    setUser(null);
-    
-    // Remove Authorization header
-    delete axios.defaults.headers.common['Authorization'];
+  const logout = async () => {
+    try {
+      // Call logout endpoint (if your backend has one)
+      // await apiPost('/auth/logout/');
+      
+      // Remove user from localStorage
+      localStorage.removeItem('user');
+      setUser(null);
+      
+      // Clear auth headers
+      setAuthToken(null);
+      
+      return true;
+    } catch (error) {
+      console.error('Logout error:', error);
+      return false;
+    }
   };
 
   const value = {

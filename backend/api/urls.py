@@ -2,7 +2,7 @@ from django.urls import path, include
 from rest_framework.routers import DefaultRouter
 from rest_framework.authtoken.views import obtain_auth_token
 from .views import UserViewSet, NGOViewSet, AnimalViewSet, AdoptionViewSet, ReviewViewSet
-from .auth import register_user, CustomAuthToken
+from .auth import register_user, CustomAuthToken, get_csrf_token
 
 # Create a router and register our viewsets with it
 router = DefaultRouter()
@@ -20,4 +20,5 @@ urlpatterns = [
     # Autenticação customizada
     path('auth/register/', register_user, name='register'),
     path('auth/login/', CustomAuthToken.as_view(), name='login'),
+    path('csrf/', get_csrf_token, name='csrf'),
 ]

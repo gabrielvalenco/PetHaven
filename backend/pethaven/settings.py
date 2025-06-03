@@ -52,7 +52,8 @@ MIDDLEWARE = [
     'django.middleware.locale.LocaleMiddleware',  # Middleware de localização
     'corsheaders.middleware.CorsMiddleware',
     'django.middleware.common.CommonMiddleware',
-    'django.middleware.csrf.CsrfViewMiddleware',
+    # Custom CSRF middleware that will be added
+    'pethaven.middleware.CustomCSRFMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
@@ -164,5 +165,25 @@ REST_FRAMEWORK = {
 }
 
 # CORS settings
-CORS_ALLOW_ALL_ORIGINS = True  # In production, you'd specify specific origins
+CORS_ALLOW_ALL_ORIGINS = False  # Changed to False since we're specifying origins
+CORS_ALLOWED_ORIGINS = [
+    "http://localhost:3000",
+    "http://127.0.0.1:3000",
+]
+CORS_ALLOW_CREDENTIALS = True  # Allow credentials (cookies)
+CORS_ALLOW_METHODS = [
+    'DELETE',
+    'GET',
+    'OPTIONS',
+    'PATCH',
+    'POST',
+    'PUT',
+]
+CORS_EXPOSE_HEADERS = ['Content-Type', 'X-CSRFToken']
+
+# CSRF settings
+CSRF_COOKIE_SAMESITE = 'Lax'  # Must be 'Lax', not 'None' for most browsers
+CSRF_COOKIE_HTTPONLY = False  # False so JavaScript can access the cookie
+CSRF_COOKIE_SECURE = False  # Set to True in production with HTTPS
+CSRF_TRUSTED_ORIGINS = ['http://localhost:3000', 'http://127.0.0.1:3000']
 

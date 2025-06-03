@@ -1,14 +1,10 @@
 import React, { useState, useEffect } from 'react';
 import { Container, Row, Col, Card, Button, Carousel } from 'react-bootstrap';
 import { Link } from 'react-router-dom';
-import axios from 'axios';
-import { motion } from 'framer-motion';
+import { api } from '../utils/api';
 import styled from 'styled-components';
 
-// Componentes de animação
-import FadeIn from '../components/animations/FadeIn';
-import SlideIn from '../components/animations/SlideIn';
-import PopIn from '../components/animations/PopIn';
+// Note: Removed unused imports
 
 // Componentes estilizados
 const HeroSection = styled.div`
@@ -101,13 +97,15 @@ const Home = () => {
   useEffect(() => {
     const fetchFeaturedAnimals = async () => {
       try {
-        // Usar URL completo para evitar problemas com o proxy
-        const response = await axios.get('http://localhost:8000/api/animals/?is_available=true&limit=6');
+        // Usando nossa instância API personalizada
+        const response = await api.get('/animals/', {
+          params: { is_available: true, limit: 6 }
+        });
         setFeaturedAnimals(response.data.results || []);
       } catch (error) {
         console.error('Error fetching featured animals:', error);
-        // Adicionar mensagem de erro para o usuário
-        alert('Falha ao carregar os animais. Por favor, verifique se o servidor backend está rodando.');
+        // Adicionar mensagem de erro para o usuário sem exibir alert
+        setFeaturedAnimals([]);
       } finally {
         setLoading(false);
       }
